@@ -5,10 +5,10 @@ import { filterImageFromURL, deleteLocalFiles } from './util/util';
 (async () => {
 
   // Init the Express application
-  const app = express();
+  const app: express.Application = express();
 
   // Set the network port
-  const port = process.env.PORT || 8082;
+  const port: string = process.env.PORT || "8082";
 
   // Use the body parser middleware for post requests
   app.use(bodyParser.json());
@@ -29,13 +29,13 @@ import { filterImageFromURL, deleteLocalFiles } from './util/util';
 
   /**************************************************************************** */
 
-  app.get("/filteredimage", async (req, res) => {
+  app.get("/filteredimage", async (req: express.Request, res: express.Response): Promise<void> => {
     if (!req.query.image_url) {
       res.status(400).send("please add query image_url")
       return;
     }
     try {
-      const filteredpath = await filterImageFromURL(req.query.image_url)
+      const filteredpath: string = await filterImageFromURL(req.query.image_url)
       res.sendFile(filteredpath)
       res.on("finish", () => deleteLocalFiles([filteredpath]))
     }
